@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <title>Contact book</title>
+</head>
+<body onload="fetchContacts()" >
+    <div id="table" >contacts loadin...</div>
+    <div>
+        <button id="refresh" type="button" ><img src="images/refresh-icon.png" height="30"/></button>
+    <button id="addContact" type="button" >Add contact</button>
+    </div>
+    
+
+    <script src="config.js" ></script>   <!-- External JavaScript file, expected to define the variable 'rootPath' -->
+    <script>
+
+         document.getElementById("refresh").addEventListener('click', fetchContacts);  // Attach an event listener to the Refresh button so it calls fetchContacts() when clicked
+         document.getElementById("addContact").addEventListener('click', addContact);
+            function fetchContacts(){     // Function to fetch contact data from the server
+                
+                fetch(rootPath + "controller/get-contacts/")  // Fetch data from a backend endpoint (rootPath should be defined in config.js)
+                .then(function(response){          // "response" now holds the raw response from the server
+                    return response.json();   // Convert the HTTP response into JSON
+                })
+                .then(function(data){    
+    // this is where we get the actual data (parsed JSON)"response"  from the server
+                   displayOutput(data);    // Pass the received data to the function that will display it
+                    
+                })
+            }
+          function displayOutput(data){  
+        // Function to display the contact data as a table
+                output = "<table>";   // Create the beginning of the table HTML
+                for(a in data){    // Loop through each contact in the data array
+                    output +=`
+                    <tr onclick= "editContact(${data[a].id})" >
+                        <td><img src="${rootPath}controller/uploads/${data[a].avatar}" width="40"/></td>
+                        <td><h5>${data[a].firstname}</h5></td>
+                        <td><h5>${data[a].lastname}</h5></td>      
+                    </tr>
+                    `
+                }
+                output += "</table>";    // Close the table HTML
+                document.getElementById("table").innerHTML = output;    // Inject the generated HTML into the div with id="table"
+            }  
+
+            function addContact(){
+                window.open("addcontact.html", "_self");
+            }
+            function editContact(id){
+                window.open("edit-contact.html?id=" + id, "_self")
+            }
+    </script>
+
+    
+</body>
+</html>

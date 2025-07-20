@@ -5,13 +5,13 @@
         <meta charset="UTF-8">
         <title>Contact book</title>
 </head>
-<body onload="fetchContacts()" >
+<body onload="fetchContacts()"  >
     <div id="table" >contacts loadin...</div>
     <div>
         <button id="refresh" type="button" ><img src="images/refresh-icon.png" height="30"/></button>
-    <button id="addContact" type="button" >Add contact</button>
+    <button id="addContact" type="button" ><img src="images/Daco_873530.png" height="30"/></button>
     </div>
-    
+
 
     <script src="config.js" ></script>   <!-- External JavaScript file, expected to define the variable 'rootPath' -->
     <script>
@@ -36,9 +36,11 @@
                 for(a in data){    // Loop through each contact in the data array
                     output +=`
                     <tr onclick= "editContact(${data[a].id})" >
-                        <td><img src="${rootPath}controller/uploads/${data[a].avatar}" width="40"/></td>
-                        <td><h5>${data[a].firstname}</h5></td>
-                        <td><h5>${data[a].lastname}</h5></td>      
+                        <td>  
+                        <img src="${rootPath}controller/uploads/${data[a].avatar}" width="65"/>
+                        <h5>${data[a].firstname}</h5> 
+                        <h5>${data[a].lastname}</h5>
+                        </td>      
                     </tr>
                     `
                 }
@@ -46,11 +48,11 @@
                 document.getElementById("table").innerHTML = output;    // Inject the generated HTML into the div with id="table"
             }  
 
-            function addContact(){
-                window.open("addcontact.html", "_self");
+            function addContact(){    // Function to open the "add contact" page in the current browser tab
+                window.open("addcontact.html", "_self"); // "_self" means open in the same tab
             }
-            function editContact(id){
-                window.open("edit-contact.html?id=" + id, "_self")
+            function editContact(id){     // Function to open the "edit contact" page for a specific contact (by ID)
+                window.open("edit-contact.html?id=" + id, "_self")  // Pass the contact's ID as a query parameter in the URL
             }
     </script>
 

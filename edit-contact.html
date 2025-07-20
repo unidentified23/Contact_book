@@ -27,34 +27,34 @@
 <script>
     document.getElementById("homeLink").addEventListener('click', homeLink);
     document.getElementById("editContact").addEventListener("click", editContact );
-    var id = getId();
+    var id = getId();                                    // This stores the ID so it can be reused in other functions                      
     document.getElementById("submitForm").addEventListener('click', submitForm);
     document.getElementById("deleteContact").addEventListener('click', deleteContact);
 
-    function getId(){
-        var url = window.location.href;
-        var pos = url.search("=");
-        var id = url.slice(pos + 1);
-        return id;
+    function getId(){                      // Extract the contact ID from the URL query parameter
+        var url = window.location.href;   // Get current page URL
+        var pos = url.search("=");            // Find position of '=' in the query string
+        var id = url.slice(pos + 1);           // Get the string after '='
+        return id;                               // Get the string after '='
     }
 
-    function getContact(){
+    function getContact(){                      // Fetch contact details for the given ID from the server
         fetch(rootPath + 'controller/get-contacts/?id=' + id)
         .then(function(response){
-            return response.json();
+            return response.json();              // Convert server response to JSON
         })
         .then(function(data){
-            displayOutput(data);
+            displayOutput(data);                 // Pass the data to be displayed in the form
             
 
         })
     }
 
-      function homeLink() {
-        window.open("index.html", "_self");
+      function homeLink() {                       // Redirects to the home page (index.html)
+        window.open("index.html", "_self");       // Open index.html in the same browser tab
       }
 
-      function displayOutput (data) {
+      function displayOutput (data) {                 // Open index.html in the same browser tab
         avatarImg = ` <img src= "${rootPath}/controller/uploads/${data[0].avatar}" width="200" />`
         firstname = ` `
         document.getElementById("avatarImage").innerHTML = avatarImg;
@@ -74,10 +74,10 @@
       }
 
       function submitForm(e) {
-        e.preventDefault();
-        const form = new FormData(document.querySelector("#editForm"));
-        form.append('apiKey', apiKey);
-        form.append('id', id);
+        e.preventDefault();                                                   // Prevent default form submission behavior (like page reload)
+        const form = new FormData(document.querySelector("#editForm"));      // Create a FormData object from the form with ID "editForm"
+        form.append('apiKey', apiKey);                                         // Add an extra field (apiKey) to the form before submission
+        form.append('id', id);                                                  // Add an extra field (id) to the form before submission
 
          fetch(rootPath + 'controller/edit-contact/',{
           method: 'POST',

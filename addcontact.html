@@ -1,60 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Add contact</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Add contact</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-</br>
-<form id="editForm" >
-    <label for="firstname" >First name</label>
-    <input type="text" id="firstname" ><br/>
-    <label for="lastname" >Last name</label>
-    <input type="text" name="lastname" id="lastname" ><br/>
-    <label for="mobile" >Mobile</label>
-    <input type="text" name="mobile" id="mobile" ><br/>
-    <label for="email" >Email</label>
-    <input type="text" name="email" id="email" ><br/>
-    <label for="avatar" >Select a file</label><br/>
-    <input type="file" name="avatar" id="avatar" ><br/>
-    <button type="submit" id="submitForm" >Submit</button>
-</form>    
-<br/>
-<button id="homeLink" type="button" ><img src="images/homepage-icon-png-2574.png"  height="30" /></button>
-<script src="config.js" ></script>
-<script>
+  </br>
+  <form id="editForm">
+    <label for="firstname">First name</label>
+    <input type="text" name="firstname" id="firstname"><br />
+    <label for="lastname">Last name</label>
+    <input type="text" name="lastname" id="lastname"><br />
+    <label for="mobile">Mobile</label>
+    <input type="text" name="mobile" id="mobile"><br />
+    <label for="email">Email</label>
+    <input type="text" name="email" id="email"><br />
+    <label for="avatar">Select a file</label><br />
+    <input type="file" name="avatar" id="avatar"><br />
+    <button type="submit" id="submitForm">Submit</button>
+  </form>
+  <br />
+  <button id="homeLink" type="button"><img src="images/homepage-icon-png-2574.png" height="30" /></button>
+  <script src="config.js"></script>
+  <script>
+    // Attach event listeners to the buttons/links with IDs "submitForm" and "homeLink"
+    document.getElementById("submitForm").addEventListener('click', submitForm);
+    document.getElementById("homeLink").addEventListener('click', homeLink);
+    function submitForm(e) {   // Function to handle the form submission
+      e.preventDefault();         // Prevent default form submission behavior (like page reload)
+      const form = new FormData(document.querySelector('#editForm'));    // Create a FormData object from the form with ID "editForm"
+      form.append('apiKey', apiKey);       // Add an extra field (apiKey) to the form before submission
 
-  document.getElementById("submitForm").addEventListener('click', submitForm);
-  document.getElementById("homeLink").addEventListener('click', homeLink);
-      function submitForm(e) {
-        e.preventDefault();
-        const form = new FormData(document.querySelector('#editForm'));
-        form.append('apiKey', apiKey );
-
-        fetch(rootPath + 'controller/insert-contact/',{
-          method: 'POST',
-          headers: {'Accept': 'application/json, *-*'},
-          body: form
+      fetch(rootPath + 'controller/insert-contact/', {    // Send a POST request to the backend to insert a contact
+        method: 'POST',
+        headers: { 'Accept': 'application/json, *-*' },     // Tell server we expect JSON (optional)
+        body: form                                         // Send form data as the request body
+      })
+        .then(function (response) {
+          return response.text();                            // Convert the response to plain text
         })
-        .then(function(response){
-          return response.text();
-        })
-        .then(function(data){
-          if (data == "1"){
-            alert("Contact added");
-            homeLink();
+        .then(function (data) {
+          if (data == "1") {                                 // Check the response data from the server
+            alert("Contact added");                         // if true show Success message
+            homeLink();                                      // Redirect to homepage
 
-          }else{
-            alert(data);
+          } else {
+            alert(data);                               // Show error message from server     
             homeLink();
           }
         })
-      }
+    }
 
-      function homeLink() {
-        window.open("index.html", "_self");
-      }
-</script>
+    function homeLink() {           // Function to navigate back to the homepage (index.html)
+      window.open("index.html", "_self"); // Open index.html in the same tab
+    }
+  </script>
 </body>
+
 </html>
